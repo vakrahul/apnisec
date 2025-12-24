@@ -1,0 +1,258 @@
+/* --- Shared Cyberpunk Variables --- */
+$neon-cyan: #00f3ff;
+$neon-blue: #0066ff;
+$neon-purple: #bc13fe;
+$bg-dark: #030014;
+$glass-bg: rgba(16, 26, 50, 0.65);
+$font-stack: 'Inter', sans-serif;
+
+/* --- GLOBAL LAYOUT --- */
+.mainWrapper {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: $bg-dark;
+  font-family: $font-stack;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- BACKGROUND UNIVERSE --- */
+.cyberUniverse {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: radial-gradient(circle at top, #1a1a2e 0%, $bg-dark 100%);
+
+  .stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 2px);
+    background-size: 550px 550px, 350px 350px; 
+    opacity: 0.8;
+  }
+
+  .gridFloor {
+    position: absolute;
+    bottom: 0;
+    left: -50%;
+    width: 200%;
+    height: 50%;
+    background: 
+      linear-gradient(transparent 0%, rgba($neon-purple, 0.4) 2%, transparent 3%),
+      linear-gradient(90deg, transparent 0%, rgba($neon-blue, 0.4) 2%, transparent 3%);
+    background-size: 80px 80px;
+    transform: perspective(500px) rotateX(60deg);
+    animation: gridScroll 10s linear infinite;
+    box-shadow: 0 0 100px rgba($neon-purple, 0.3);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
+  }
+
+  .horizonGlow {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: $neon-cyan;
+    box-shadow: 0 0 60px 20px rgba($neon-cyan, 0.3);
+    z-index: 1;
+  }
+}
+
+@keyframes gridScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 80px; }
+}
+
+/* --- CONTENT LAYOUT --- */
+.contentContainer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 4rem;
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+    padding-top: 6rem; /* Space for navbar */
+    gap: 2rem;
+  }
+}
+
+/* --- LEFT COLUMN: 3D VISUALS --- */
+.visualColumn {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 600px;
+  width: 100%;
+
+  .canvasWrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .techRingOuter {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px; height: 450px;
+    border: 2px dashed rgba($neon-purple, 0.3);
+    border-radius: 50%;
+    z-index: -1;
+    animation: spin 20s linear infinite;
+  }
+}
+@keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* --- RIGHT COLUMN: GLASS HUD --- */
+.formColumn {
+  flex: 0 0 450px;
+  display: flex;
+  justify-content: center;
+  
+  @media (max-width: 968px) {
+    flex: 1;
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+.glassCard {
+  position: relative;
+  width: 100%;
+  padding: 3rem;
+  background: $glass-bg;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+
+  /* CORNER BRACKETS */
+  .hudCornerTopLeft, .hudCornerTopRight, .hudCornerBottomLeft, .hudCornerBottomRight {
+    position: absolute;
+    width: 25px; height: 25px;
+    border-color: $neon-cyan;
+    border-style: solid;
+    box-shadow: 0 0 10px $neon-cyan;
+  }
+  .hudCornerTopLeft { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-radius: 6px 0 0 0; }
+  .hudCornerTopRight { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-radius: 0 6px 0 0; }
+  .hudCornerBottomLeft { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-radius: 0 0 0 6px; }
+  .hudCornerBottomRight { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-radius: 0 0 6px 0; }
+
+  h1 {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba($neon-cyan, 0.7);
+  }
+
+  .headerLine {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, $neon-cyan, transparent);
+    margin: 0 auto 2rem auto;
+  }
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+  
+  label {
+    display: block;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+
+    &:focus {
+      border-color: $neon-cyan;
+      box-shadow: 0 0 15px rgba($neon-cyan, 0.15);
+      background: rgba(0, 243, 255, 0.05);
+    }
+  }
+}
+
+.button {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, rgba($neon-cyan, 0.1), rgba($neon-blue, 0.3), rgba($neon-cyan, 0.1));
+  border: 1px solid $neon-cyan;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 8px;
+
+  &:hover {
+    background: $neon-cyan;
+    color: black;
+    box-shadow: 0 0 30px rgba($neon-cyan, 0.6);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.loginLink {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  
+  a {
+    color: $neon-purple;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    
+    &:hover { text-shadow: 0 0 8px $neon-purple; }
+  }
+}
+
+.error {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+    padding: 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+}

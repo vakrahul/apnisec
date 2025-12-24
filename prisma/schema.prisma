@@ -1,0 +1,42 @@
+// 1. GENERATOR
+// This tells Prisma to create the JavaScript client for your app
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. DATASOURCE (Supabase Configuration)
+// We use two URLs:
+// 'url'       -> Connection Pooler (Port 6543) for fast app performance
+// 'directUrl' -> Direct Connection (Port 5432) for Schema Pushes/Migrations
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// 3. USER MODEL
+model User {
+  id        String   @id @default(uuid()) // Unique ID
+  name      String
+  email     String   @unique
+  password  String   // Hashed password
+  createdAt DateTime @default(now())
+  
+  // Relationship: One User can have many Issues
+  issues    Issue[]
+}
+
+// 4. ISSUE MODEL
+model Issue {
+  id          String   @id @default(cuid()) // Collision-resistant ID
+  title       String
+  type        String   // e.g., "Cloud Security", "VAPT"
+  description String
+  priority    String   // e.g., "High", "Medium"
+  status      String   @default("Open") // e.g., "Open", "Resolved"
+  createdAt   DateTime @default(now())
+
+  // Relationship: Belongs to a User
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}

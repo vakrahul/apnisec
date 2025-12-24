@@ -1,0 +1,124 @@
+.mainWrapper {
+  min-height: 100vh;
+  background-color: #030014;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-image: 
+    radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000 100%);
+}
+
+.glassCard {
+  background: rgba(13, 13, 30, 0.7);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  backdrop-filter: blur(12px);
+  padding: 3rem;
+  border-radius: 16px;
+  width: 900px;
+  max-width: 100%;
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+
+  h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  }
+}
+
+.contentContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    color: #00f3ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 0.8rem;
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    transition: 0.3s;
+
+    &:focus {
+      border-color: #00f3ff;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+}
+
+.submitBtn {
+  background: linear-gradient(90deg, #00f3ff, #0066ff);
+  color: #000;
+  font-weight: bold;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.visualColumn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  img {
+    max-width: 100%;
+    filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.5));
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
