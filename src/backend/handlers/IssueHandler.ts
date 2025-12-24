@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { IssueService } from '../services/IssueService';
-import { IssueRepository } from '../repositories/IssueRepository';
 import { RateLimiter } from '@/backend/middleware/RateLimiter';
 
 export class IssueHandler {
   private issueService: IssueService;
 
   constructor() {
-    this.issueService = new IssueService(new IssueRepository());
+    // ✅ FIX: Use getInstance() instead of 'new IssueService()'
+    // The Service handles its own Repository internally now.
+    this.issueService = IssueService.getInstance();
   }
 
   // --- Helper: Rate Limit Check ---
@@ -19,27 +20,23 @@ export class IssueHandler {
 
   // --- Helper: Extract User ID from Token ---
   private getUserId(req: NextRequest): string | null {
-    console.log("🔍 [Debug] Checking Auth for request...");
-
     // 1. Check for Cookie
     const cookie = req.cookies.get('auth_token');
     if (!cookie) {
-        console.log("❌ [Debug] Error: 'auth_token' cookie is MISSING.");
-        return null;
+      console.log("❌ [Debug] Error: 'auth_token' cookie is MISSING.");
+      return null;
     }
-    console.log("🍪 [Debug] Cookie found. Token:", cookie.value.substring(0, 10) + "...");
 
     // 2. Check for Secret
     const secret = process.env.JWT_SECRET;
     if (!secret) {
-        console.log("❌ [Debug] CRITICAL ERROR: process.env.JWT_SECRET is undefined. Check .env.local!");
-        return null;
+      console.log("❌ [Debug] CRITICAL ERROR: process.env.JWT_SECRET is undefined.");
+      return null;
     }
 
     // 3. Verify Token
     try {
       const decoded: any = jwt.verify(cookie.value, secret);
-      console.log("✅ [Debug] Token Valid! UserID:", decoded.userId);
       return decoded.userId;
     } catch (e: any) {
       console.log("❌ [Debug] Token Verification Failed:", e.message);
@@ -50,7 +47,7 @@ export class IssueHandler {
   // GET: List all issues
   async getIssues(req: NextRequest) {
     const userId = this.getUserId(req);
-    if (!userId) return NextResponse.json({ error: "Unauthorized - Check Terminal Logs" }, { status: 401 });
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     try {
       const issues = await this.issueService.getUserIssues(userId);
@@ -66,11 +63,13 @@ export class IssueHandler {
     if (!limit.allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
     const userId = this.getUserId(req);
-    if (!userId) return NextResponse.json({ error: "Unauthorized - Check Terminal Logs" }, { status: 401 });
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     try {
       const body = await req.json();
-      const issue = await this.issueService.createIssue(userId, body);
+      
+      // ✅ FIX: Ensure arguments match your Service definition (data, userId)
+      const issue = await this.issueService.createIssue(body, userId);
       
       const response = NextResponse.json({ success: true, data: issue }, { status: 201 });
       response.headers.set('X-RateLimit-Limit', '100');
