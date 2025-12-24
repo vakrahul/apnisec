@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import styles from './navbar.module.scss';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const pathname = usePathname();
