@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#  APNISEC - Next-Gen Security Platform
 
-## Getting Started
+![Version](https://img.shields.io/badge/version-1.0.0-cyan.svg)
+![Stack](https://img.shields.io/badge/Next.js-15-black)
+![Database](https://img.shields.io/badge/PostgreSQL-Supabase-green)
+![Style](https://img.shields.io/badge/Style-Cyberpunk-pink)
 
-First, run the development server:
+**ApniSec** is a cutting-edge cybersecurity platform backend built with **Next.js**, **Prisma**, and **PostgreSQL**. It features a high-performance, dark-themed cyberpunk UI with advanced authentication, optimized animations, and a secure dashboard architecture.
 
-```bash
+---
+
+## 🚀 Features
+
+* **⚡ High-Performance UI:** Optimized animations aiming for 90+ Lighthouse score.
+* **🔐 Secure Authentication:** JWT-based robust login/signup system with hashed passwords (bcrypt).
+* **🎨 Cyberpunk Aesthetic:** Custom SCSS modules with neon glows, glassmorphism, and GPU-accelerated effects.
+* **🗄️ Database ORM:** Managed via Prisma with a scalable PostgreSQL connection (Supabase).
+* **📱 Responsive Design:** Fully adaptive layouts for Desktop, Tablet, and Mobile.
+* **🛡️ Type Safety:** Built entirely with TypeScript for reliability.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework:** [Next.js 15 (Stable)](https://nextjs.org/)
+* **Language:** TypeScript
+* **Database:** PostgreSQL (via [Supabase](https://supabase.com/))
+* **ORM:** [Prisma](https://www.prisma.io/)
+* **Styling:** SCSS Modules & Tailwind CSS
+* **Deployment:** Netlify / Vercel
+2. Install Dependencies
+Bash
+
+npm install
+3. Configure Environment Variables
+Create a .env file in the root directory and add your Supabase connection string:
+
+Code snippet
+
+# Supabase Transaction Pooler String (Recommended for Serverless)
+# Go to Supabase > Settings > Database > Connection Pooling
+DATABASE_URL="postgres://postgres.xxxx:[password]@[aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true](https://aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true)"
+
+# Security
+JWT_SECRET="your_super_secret_random_key_here"
+
+# App URL
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+4. Setup Database
+Push the schema to Supabase:
+
+Bash
+
+npx prisma generate
+npx prisma db push
+5. Run Development Server
+Bash
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Follow these steps to set up the project locally.
 
-## Learn More
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/your-username/apnisec-backend.git](https://github.com/your-username/apnisec-backend.git)
+cd apnisec-backend
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<p align="center"> Built with ❤️ by <strong>Rahul Vakiti With Intrest</strong> </p> 
