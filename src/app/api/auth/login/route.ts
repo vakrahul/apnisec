@@ -1,15 +1,25 @@
 import { NextResponse } from 'next/server';
-import { AuthService, AppError } from '@/lib/AuthService';
+import { AuthService } from '@/lib/AuthService';
+import { AppError } from '@/lib/AppError';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
+    // SIMPLE INSTANTIATION (No getInstance)
     const authService = new AuthService();
     
-    // Call the REAL login logic
     const result = await authService.login(body);
     
-    return NextResponse.json(result, { status: 200 });
+    const response = NextResponse.json(result, { status: 200 });
+
+    response.cookies.set('auth_token', result.token, {
+        httpOnly: true, 
+        path: '/',
+        maxAge: 86400 
+    });
+    
+    return response;
 
   } catch (error: any) {
     const status = error instanceof AppError ? error.statusCode : 500;

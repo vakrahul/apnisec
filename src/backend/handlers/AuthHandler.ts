@@ -1,58 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { EmailService } from '@/lib/EmailService';
-
-// ----------------------------------------------------------------------
-// 💡 UNIVERSAL DATABASE MOCK
-// (Since we don't have your specific DB connection, this mimics a DB)
-// You just need to swap the lines inside the methods below.
-// ----------------------------------------------------------------------
+import { AuthService } from '@/lib/AuthService';
 
 export class AuthHandler {
-  private emailService: EmailService;
+  private authService: AuthService;
 
   constructor() {
-    this.emailService = new EmailService();
+    // Initialize the Real Service (Connects to Prisma & JWT)
+    this.authService = new AuthService();
   }
 
   // ====================================================================
-  // 1. REGISTER (With Email Trigger)
+  // 1. REGISTER
   // ====================================================================
   async register(req: NextRequest) {
     try {
       const body = await req.json();
-      const { email, name, password } = body;
 
-      // A. Validation
-      if (!email || !password || !name) {
-        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-      }
+      // Call the Service (Handles Validation, DB creation, Password Hashing, Email)
+      const result = await this.authService.register(body);
 
-      // B. Check if User Already Exists (Universal Logic)
-      // const existingUser = await db.user.findUnique({ where: { email } });
-      // if (existingUser) return NextResponse.json({ error: 'User already exists' }, { status: 409 });
-      
-      // [Simulation]
-      if (email === 'duplicate@test.com') {
-         return NextResponse.json({ error: 'User already exists' }, { status: 409 });
-      }
-
-      // C. Create User
-      // const newUser = await db.user.create({ data: { email, name, password } });
-      const newUser = { id: 'user_' + Date.now(), email, name, role: 'USER' }; 
-
-      // D. Send Welcome Email (Non-blocking)
-      // We don't await this because we want the UI to be fast
-      this.emailService.sendWelcomeEmail(email, name)
-        .then(() => console.log(`✅ Welcome email sent to ${email}`))
-        .catch((err) => console.error(`❌ Failed to send email:`, err));
-
-      return NextResponse.json({ 
-        message: 'User registered successfully', 
-        user: newUser 
+      const response = NextResponse.json({ 
+        message: 'User registered successfully',
+        success: true, 
+        data: result 
       }, { status: 201 });
 
+      // Set Auth Cookie immediately
+      response.cookies.set('auth_token', result.token, {
+        httpOnly: true,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 // 1 day
+      });
+
+      return response;
+
     } catch (error: any) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      // Return specific error message from Service (e.g. "User already exists")
+      return NextResponse.json(
+        { error: error.message || 'Registration failed' }, 
+        { status: error.statusCode || 400 }
+      );
     }
   }
 
@@ -62,24 +50,31 @@ export class AuthHandler {
   async login(req: NextRequest) {
     try {
       const body = await req.json();
-      const { email, password } = body;
 
-      // A. Verify Credentials
-      // const user = await db.user.findUnique({ where: { email } });
-      // if (!user || !bcrypt.compare(password, user.password)) ...
-      
-      if (email && password) {
-        // [Simulation] Success
-        return NextResponse.json({ 
-          message: 'Login successful', 
-          token: 'mock_jwt_token_123' 
-        });
-      }
+      // Call the Service (Handles DB lookup, Password Check, JWT Generation)
+      const result = await this.authService.login(body);
 
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      const response = NextResponse.json({ 
+        message: 'Login successful',
+        success: true, 
+        data: result 
+      }, { status: 200 });
+
+      // Set Auth Cookie
+      response.cookies.set('auth_token', result.token, {
+        httpOnly: true,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 // 1 day
+      });
+
+      return response;
 
     } catch (error: any) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message || 'Login failed' }, 
+        { status: error.statusCode || 401 }
+      );
     }
   }
 
@@ -88,31 +83,17 @@ export class AuthHandler {
   // ====================================================================
   async logout(req: NextRequest) {
     try {
-      // Clear cookies or sessions here
-      const response = NextResponse.json({ message: 'Logged out successfully' });
-      response.cookies.delete('token'); // Example of universal cleanup
+      const response = NextResponse.json({ 
+        success: true, 
+        message: 'Logged out successfully' 
+      });
+
+      // Delete the cookie
+      response.cookies.delete('auth_token');
+      
       return response;
     } catch (error: any) {
       return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-  }
-
-  // ====================================================================
-  // 4. GET PROFILE
-  // ====================================================================
-  async getProfile(req: NextRequest) {
-    try {
-      // Logic to get the current user from session/token
-      // const session = await getSession(req);
-      // if (!session) throw new Error("Unauthorized");
-
-      return NextResponse.json({ 
-        id: 'user_123', 
-        name: 'Test User', 
-        email: 'test@example.com' 
-      });
-    } catch (error: any) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }
 }
