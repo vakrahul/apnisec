@@ -1,13 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Enables standard Webpack behavior features
+  // We remove the 'experimental' block completely.
+  // This forces Next.js to use the default Webpack bundler.
   reactStrictMode: true,
-  
-  // This ensures we aren't accidentally opting into experimental turbo features
-  experimental: {
-    // turbo: {} // Keep this commented out or empty to avoid triggering Turbo
-  }
 };
 
 export default nextConfig;
