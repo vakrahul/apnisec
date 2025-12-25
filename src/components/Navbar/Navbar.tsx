@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import styles from './navbar.module.scss'; // <--- The Final Correct Import
+// Ensure this path matches where your SCSS file is
+import styles from './navbar.module.scss'; 
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -16,6 +17,7 @@ export default function Navbar() {
     setIsLoggedIn(!!token);
   }, []);
 
+  // Hide Navbar on dashboard
   if (pathname?.startsWith('/dashboard')) {
     return null;
   }
@@ -30,7 +32,8 @@ export default function Navbar() {
         </Link>
 
         <div className={styles.navLinks}>
-          <Link href="/">Services</Link>
+          {/* ✅ UPDATED LINK: Points to /services now */}
+          <Link href="/services">Services</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
         </div>
