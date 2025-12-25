@@ -36,28 +36,24 @@ npm install
 Create a .env file in the root directory and add your Supabase connection string:
 
 Code snippet
-
+```bash
 # Supabase Transaction Pooler String (Recommended for Serverless)
 # Go to Supabase > Settings > Database > Connection Pooling
 DATABASE_URL="postgres://postgres.xxxx:[password]@[aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true](https://aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true)"
 
 # Security
 JWT_SECRET="your_super_secret_random_key_here"
-
+```
 # App URL
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```bash
 4. Setup Database
 Push the schema to Supabase:
-
-Bash
-
 npx prisma generate
 npx prisma db push
 5. Run Development Server
-Bash
-
 npm run dev
-
+```
 ---
 
 ## ⚙️ Getting Started
@@ -68,5 +64,6 @@ Follow these steps to set up the project locally.
 ```bash
 git clone [https://github.com/your-username/apnisec-backend.git](https://github.com/your-username/apnisec-backend.git)
 cd apnisec-backend
+```
 
-<p align="center"> Built with ❤️ by <strong>Rahul Vakiti With Intrest</strong> </p> 
+<p align="center"> Built with ❤️ by <strong>Rahul Vakiti With Intrest and passion</strong> </p> 
