@@ -17,7 +17,7 @@
 * **🗄️ Database ORM:** Managed via Prisma with a scalable PostgreSQL connection (Supabase).
 * **📱 Responsive Design:** Fully adaptive layouts for Desktop, Tablet, and Mobile.
 * **🛡️ Type Safety:** Built entirely with TypeScript for reliability.
-**View the Live Site:** [https://apnisecz.netlify.app/](https://apnisecz.netlify.app/)
+
 ---
 
 ## 🛠️ Tech Stack
@@ -28,19 +28,15 @@
 * **ORM:** [Prisma](https://www.prisma.io/)
 * **Styling:** SCSS Modules & Tailwind CSS
 * **Deployment:** Netlify / Vercel
-2. Install Dependencies
-Bash
 
+ ```bash
+2. Install Dependencies
 npm install
 3. Configure Environment Variables
 Create a .env file in the root directory and add your Supabase connection string:
-
-Code snippet
-```bash
 # Supabase Transaction Pooler String (Recommended for Serverless)
 # Go to Supabase > Settings > Database > Connection Pooling
 DATABASE_URL="postgres://postgres.xxxx:[password]@[aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true](https://aws-0-region.pooler.supabase.com:6543/postgres?pgbouncer=true)"
-
 # Security
 JWT_SECRET="your_super_secret_random_key_here"
 ```
