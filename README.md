@@ -17,7 +17,7 @@
 * **🗄️ Database ORM:** Managed via Prisma with a scalable PostgreSQL connection (Supabase).
 * **📱 Responsive Design:** Fully adaptive layouts for Desktop, Tablet, and Mobile.
 * **🛡️ Type Safety:** Built entirely with TypeScript for reliability.
-
+**View the Live Site:** [https://apnisecz.netlify.app/](https://apnisecz.netlify.app/)
 ---
 
 ## 🛠️ Tech Stack
